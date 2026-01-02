@@ -1,6 +1,6 @@
 {
   "scripts": {
     "setup": "uv venv && uv sync && ./download_fonts.sh",
-    "run": "uv run python generate_rppm_pdf_v2.py"
+    "run": "uv run python main.py"
   }
 }

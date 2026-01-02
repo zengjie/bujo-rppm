@@ -12,4 +12,4 @@ class Settings:
     num_collections_per_index: int = 18
     num_collection_indexes: int = 2
 
-    output_path: str = "output/BulletJournal_rPPM_v2.pdf"
+    output_path: str = "output/BulletJournal_rPPM.pdf"

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
 Generate Bullet Journal PDF optimized for reMarkable Paper Pro Move (rPPM).
-Version 2: Modular generator with validation.
 """
 
 from pathlib import Path
 
-from rppm import BulletJournalGenerator
-from rppm.config import Settings
+from bujo import BulletJournalGenerator
+from bujo.config import Settings
 
 
 def main() -> None:

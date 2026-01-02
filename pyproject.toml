@@ -1,5 +1,5 @@
 [project]
-name = "rppm-bullet-journal"
+name = "bujo-rppm"
 version = "0.1.0"
 description = "Bullet Journal PDF generator optimized for reMarkable Paper Pro Move (rPPM)"
 readme = "CLAUDE.md"

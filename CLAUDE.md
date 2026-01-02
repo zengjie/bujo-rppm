@@ -4,10 +4,10 @@ This project generates a Bullet Journal PDF optimized for reMarkable Paper Pro M
 
 ## Project Structure
 
-- `generate_rppm_pdf_v2.py` - Main entry point
-- `rppm/` - Modular generator (config, calendar model, rendering, validation)
+- `main.py` - Main entry point
+- `bujo/` - Modular generator (config, calendar model, rendering, validation)
 - `original/Bullet Journal.pdf` - Original reference PDF
-- `output/BulletJournal_rPPM_v2.pdf` - Generated output
+- `output/BulletJournal_rPPM.pdf` - Generated output
 
 ## Usage
 
@@ -15,7 +15,7 @@ This project generates a Bullet Journal PDF optimized for reMarkable Paper Pro M
 ./download_fonts.sh
 uv venv
 uv sync
-uv run python generate_rppm_pdf_v2.py
+uv run python main.py
 ```
 
 ## Requirements

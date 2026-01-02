@@ -3,6 +3,17 @@ revision = 3
 requires-python = ">=3.10"
 
 [[package]]
+name = "bujo-rppm"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "pymupdf" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "pymupdf", specifier = ">=1.23,<2.0" }]
+
+[[package]]
 name = "pymupdf"
 version = "1.26.7"
 source = { registry = "https://pypi.org/simple" }
@@ -16,14 +27,3 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/85/8e/a117d39092ca645fde8b903f4a941d9aa75b370a67b4f1f435f56393dc5a/pymupdf-1.26.7-cp310-abi3-win32.whl", hash = "sha256:7c9645b6f5452629c747690190350213d3e5bbdb6b2eca227d82702b327f6eee", size = 17203888, upload-time = "2025-12-12T13:59:57.613Z" },
     { url = "https://files.pythonhosted.org/packages/dd/c3/d0047678146c294469c33bae167c8ace337deafb736b0bf97b9bc481aa65/pymupdf-1.26.7-cp310-abi3-win_amd64.whl", hash = "sha256:425b1befe40d41b72eb0fe211711c7ae334db5eb60307e9dd09066ed060cceba", size = 18405952, upload-time = "2025-12-11T21:48:02.947Z" },
 ]
-
-[[package]]
-name = "rppm-bullet-journal"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "pymupdf" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "pymupdf", specifier = ">=1.23,<2.0" }]

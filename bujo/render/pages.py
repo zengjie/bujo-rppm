@@ -5,9 +5,9 @@ from typing import List, Tuple
 
 import fitz
 
-from ..calendar_model import CalendarModel
-from ..config import Layout, Settings, Theme, Typography
-from ..page_map import PageMap
+from bujo.calendar_model import CalendarModel
+from bujo.config import Layout, Settings, Theme, Typography
+from bujo.page_map import PageMap
 from .primitives import Renderer
 
 
