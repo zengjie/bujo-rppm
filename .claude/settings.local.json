@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "WebSearch",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(fc-list:*)",
+      "Bash(file:*)",
+      "Bash(xxd:*)",
+      "Bash(time python3:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
