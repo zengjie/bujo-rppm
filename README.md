@@ -6,7 +6,7 @@ A Bullet Journal PDF generator optimized for the reMarkable Paper Pro Move (rPPM
 
 ## Quick Download
 
-Download the latest pre-built PDF from [GitHub Releases](https://github.com/zengjie/bujo-rppm/releases/latest).
+Download the latest pre-built PDFs from [GitHub Releases](https://github.com/zengjie/bujo-rppm/releases/latest). Each release includes PDFs for the previous year, current year, and next year.
 
 ## Features
 
@@ -53,13 +53,19 @@ uv sync
 
 ## Usage
 
-Generate the PDF:
+Generate the PDF for the current year:
 
 ```bash
 uv run python main.py
 ```
 
-Output is saved to `output/BulletJournal_rPPM.pdf`.
+Generate for a specific year:
+
+```bash
+uv run python main.py 2025
+```
+
+Output is saved to `output/BulletJournal_rPPM_YYYY.pdf`.
 
 ## Configuration
 
