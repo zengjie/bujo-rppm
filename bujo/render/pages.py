@@ -35,9 +35,117 @@ class PageContext:
     typography: Typography
 
 
+def _draw_cover_flow_field(page, layout, theme) -> None:
+    """Draw flowing streamlines of golden dots on the cover.
+
+    Creates visible flow patterns by tracing particles along a vector field,
+    producing the coherent, directional movement seen in bird flocks (Boids).
+
+    The streamlines flow naturally across the entire page.
+    Text is rendered on top, so no exclusion zone needed.
+    """
+    import math
+
+    # Golden color
+    gold = theme.gold
+
+    def flow_field(x: float, y: float) -> tuple[float, float]:
+        """Calculate flow direction at any point.
+
+        Uses a smooth analytical function to ensure continuous derivatives,
+        preventing abrupt direction changes that cause jagged streamlines.
+        """
+        width = layout.target_width
+        height = layout.target_height
+        nx, ny = x / width, y / height  # Normalized coords [0, 1]
+
+        # Base angle: nearly horizontal, curves smoothly downward
+        base_angle = math.pi * 0.08
+
+        # Smooth curvature that increases toward bottom-right
+        curve_factor = nx * ny
+        angle_offset = curve_factor * math.pi * 0.35
+
+        # Gentle sinusoidal variation for organic feel
+        wave = math.sin((nx + ny) * math.pi * 1.5) * 0.08
+
+        # Final angle
+        angle = base_angle + angle_offset + wave
+
+        return math.cos(angle), math.sin(angle)
+
+    def trace_streamline(start_x: float, start_y: float, num_dots: int, dot_spacing: float) -> list:
+        """Trace a streamline using fine integration steps, sampling at regular arc-length intervals."""
+        points = []
+        x, y = start_x, start_y
+
+        integration_step = 3.0
+        distance_since_last_dot = 0.0
+        max_steps = num_dots * int(dot_spacing / integration_step) + 500
+
+        for _ in range(max_steps):
+            if len(points) >= num_dots:
+                break
+
+            # Check bounds
+            if x < 5 or x > layout.target_width - 5 or y < 5 or y > layout.target_height - 5:
+                break
+
+            # Record point if we've traveled enough distance
+            if distance_since_last_dot >= dot_spacing:
+                points.append((x, y))
+                distance_since_last_dot = 0.0
+
+            # Integrate one small step
+            dx, dy = flow_field(x, y)
+            x += dx * integration_step
+            y += dy * integration_step
+            distance_since_last_dot += integration_step
+
+        return points
+
+    shape = page.new_shape()
+
+    # Generate streamlines from seed points
+    # Sparse spacing for elegant, minimal look
+    seed_spacing_x = 70
+    seed_spacing_y = 55
+    num_dots_per_line = 12
+    dot_spacing = 22  # Arc-length distance between dots
+
+    # Single pass for cleaner look
+    seed_y = 15
+    while seed_y < layout.target_height + 50:
+        seed_x = -50
+        while seed_x < layout.target_width + 30:
+            # Trace streamline from this seed
+            points = trace_streamline(seed_x, seed_y, num_dots_per_line, dot_spacing)
+
+            # Draw dots along streamline with varying sizes
+            for i, (px, py) in enumerate(points):
+                # Size varies along streamline (larger in middle, taper at ends)
+                t = i / max(len(points) - 1, 1)
+                size_curve = math.sin(t * math.pi) * 0.6 + 0.4  # 0.4 to 1.0
+
+                radius = 1.3 * size_curve
+
+                if radius > 0.4:
+                    rect = fitz.Rect(px - radius, py - radius, px + radius, py + radius)
+                    shape.draw_oval(rect)
+
+            seed_x += seed_spacing_x
+        seed_y += seed_spacing_y
+
+    shape.finish(color=gold, fill=gold)
+    shape.commit()
+
+
 def generate_cover(ctx: PageContext, page_idx: int) -> None:
     page = ctx.renderer.doc[page_idx]
     page.draw_rect(page.rect, color=ctx.theme.black, fill=ctx.theme.black)
+
+    # Draw flow field pattern first (behind text)
+    _draw_cover_flow_field(page, ctx.layout, ctx.theme)
 
     left_margin = 50
     title_y = ctx.layout.target_height * 0.15
