@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - 'v*'
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -33,38 +31,41 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
-      - name: Generate PDF
-        run: uv run python main.py
-
-      - name: Validate PDF
+      - name: Generate PDFs for previous, current, and next year
         run: |
-          if [ ! -f output/BulletJournal_rPPM.pdf ]; then
-            echo "Error: PDF not generated"
-            exit 1
-          fi
-          SIZE=$(stat -c%s output/BulletJournal_rPPM.pdf 2>/dev/null || stat -f%z output/BulletJournal_rPPM.pdf)
-          echo "PDF size: $SIZE bytes"
-          if [ "$SIZE" -lt 1000000 ]; then
-            echo "Warning: PDF seems too small"
-          fi
+          CURRENT_YEAR=$(date +%Y)
+          PREV_YEAR=$((CURRENT_YEAR - 1))
+          NEXT_YEAR=$((CURRENT_YEAR + 1))
+          echo "Generating PDFs for years: $PREV_YEAR, $CURRENT_YEAR, $NEXT_YEAR"
+          uv run python main.py $PREV_YEAR
+          uv run python main.py $CURRENT_YEAR
+          uv run python main.py $NEXT_YEAR
 
-      - name: Upload PDF artifact
+      - name: Validate PDFs
+        run: |
+          CURRENT_YEAR=$(date +%Y)
+          for YEAR in $((CURRENT_YEAR - 1)) $CURRENT_YEAR $((CURRENT_YEAR + 1)); do
+            PDF="output/BulletJournal_rPPM_${YEAR}.pdf"
+            if [ ! -f "$PDF" ]; then
+              echo "Error: $PDF not generated"
+              exit 1
+            fi
+            SIZE=$(stat -c%s "$PDF" 2>/dev/null || stat -f%z "$PDF")
+            echo "$PDF size: $SIZE bytes"
+            if [ "$SIZE" -lt 1000000 ]; then
+              echo "Warning: $PDF seems too small"
+            fi
+          done
+
+      - name: Upload PDF artifacts
         uses: actions/upload-artifact@v4
         with:
           name: BulletJournal_rPPM
-          path: output/BulletJournal_rPPM.pdf
-
-      - name: Prepare release files
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          VERSION=${GITHUB_REF#refs/tags/}
-          cp output/BulletJournal_rPPM.pdf "output/BulletJournal_rPPM_${VERSION}.pdf"
+          path: output/BulletJournal_rPPM_*.pdf
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            output/BulletJournal_rPPM_*.pdf
-            output/BulletJournal_rPPM.pdf
+          files: output/BulletJournal_rPPM_*.pdf
           generate_release_notes: true
