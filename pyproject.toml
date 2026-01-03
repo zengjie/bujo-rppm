@@ -2,7 +2,7 @@
 name = "bujo-rppm"
 version = "0.1.0"
 description = "Bullet Journal PDF generator optimized for reMarkable Paper Pro Move (rPPM)"
-readme = "CLAUDE.md"
+readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
   "PyMuPDF>=1.23,<2.0",

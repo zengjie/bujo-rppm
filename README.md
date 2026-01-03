@@ -1,6 +1,12 @@
-# Bullard
+# bujo-rppm
+
+[![Build and Release PDF](https://github.com/zengjie/bujo-rppm/actions/workflows/build-release.yml/badge.svg)](https://github.com/zengjie/bujo-rppm/actions/workflows/build-release.yml)
 
 A Bullet Journal PDF generator optimized for the reMarkable Paper Pro Move (rPPM) e-ink tablet.
+
+## Quick Download
+
+Download the latest pre-built PDF from [GitHub Releases](https://github.com/zengjie/bujo-rppm/releases/latest).
 
 ## Features
 
@@ -34,8 +40,8 @@ Requires Python 3.10+ and [uv](https://github.com/astral-sh/uv).
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/bullard.git
-cd bullard
+git clone https://github.com/zengjie/bujo-rppm.git
+cd bujo-rppm
 
 # Download required fonts
 ./download_fonts.sh
@@ -75,7 +81,7 @@ class Settings:
 ## Project Structure
 
 ```
-bullard/
+bujo-rppm/
 ├── main.py              # Entry point
 ├── bujo/                # Core generator module
 │   ├── generator.py     # Main BulletJournalGenerator class
