@@ -6,7 +6,7 @@ A Bullet Journal PDF generator optimized for the reMarkable Paper Pro Move (rPPM
 
 ## Quick Download
 
-Download the latest pre-built PDF from [GitHub Releases](https://github.com/zengjie/bujo-rppm/releases/latest).
+Download pre-built PDFs from [GitHub Releases](https://github.com/zengjie/bujo-rppm/releases/latest). Each release includes PDFs for the previous, current, and next year.
 
 ## Features
 
@@ -56,10 +56,14 @@ uv sync
 Generate the PDF:
 
 ```bash
+# Generate for current year
 uv run python main.py
+
+# Generate for a specific year
+uv run python main.py 2025
 ```
 
-Output is saved to `output/BulletJournal_rPPM.pdf`.
+Output is saved to `output/BulletJournal_rPPM_<year>.pdf`.
 
 ## Configuration
 
@@ -68,14 +72,13 @@ Edit `bujo/config/settings.py` to customize:
 ```python
 @dataclass(frozen=True)
 class Settings:
-    year: int = 2026              # Target year
+    year: int                     # Target year (set via command line)
     pages_per_day: int = 1        # Daily log pages per day
     pages_per_collection: int = 1 # Pages per collection entry
     num_guide_pages: int = 6      # Introductory guide pages
     num_future_log_pages: int = 4 # Quarterly future log pages
     num_collections_per_index: int = 18  # Collections per index
     num_collection_indexes: int = 2      # Number of collection indexes
-    output_path: str = "output/BulletJournal_rPPM.pdf"
 ```
 
 ## Project Structure
@@ -105,6 +108,20 @@ bujo-rppm/
 
 - [PyMuPDF](https://pymupdf.readthedocs.io/) - PDF generation and manipulation
 - [EB Garamond](https://github.com/octaviopardo/EBGaramond12) - Typography
+
+## Automated Builds
+
+This project uses GitHub Actions for CI/CD:
+
+- **CI** (`ci.yml`): Runs on every push and pull request to `main`. Validates Python syntax.
+- **Build and Release** (`build-release.yml`): Triggered by version tags (`v*`) or manual dispatch. Generates PDFs for the previous, current, and next year, then uploads them as release assets.
+
+To create a new release:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
 
 ## License
 
